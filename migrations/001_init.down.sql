@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS outbox;
+DROP TABLE IF EXISTS ledger;
+DROP TABLE IF EXISTS wager_transactions;
+DROP TABLE IF EXISTS wallets;

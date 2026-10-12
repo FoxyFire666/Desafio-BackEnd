@@ -1,0 +1,82 @@
+NOTA IMPORTANTE
+Antes de começar eu gostaria de agradecer pela oportunidade de participar deste processo seletivo mas preciso ser honesto e dizer que tive que usar IA para a construção desta API, o desafio exigia o uso de uma linguagem que nunca tinha usado antes e métodos muito mais complexos do que minha faculdade me mostrou, em resumo este desafio estava muito acima do meu nível de conhecimento e não conseguiria fazer tudo sozinho nem que eu tivesse tido um desempenho exemplar no meu curso, entretanto não queria simplesmente abandonar o projeto e não entregar nada e acredito que ser sincero e dizer a verdade é melhor do que fingir saber o que estou fazendo para no final passar pela próxima entrevista e ser pego na mentira, no entanto eu ainda tentei dar o meu melhor para entender o funcionamento do código e seu proposito principal além de ter feito este arquivo com todos os códigos de teste principais para testar o código, peço desculpas por não conseguir fazer por conta própria e também peço desculpas caso tenha cometido algum erro na entrega, entendo perfeitamente caso queiram me desclassificar do processo mas mesmo assim sou grato pela oportunidade.
+
+Desafio BackEnd - Códigos de teste
+==============================================================================================================================================================================
+1- Iniciar a API (na primeira janela do PowerShell):
+cd "C:\Users\Pichau\Documents\Desafio Backend"
+go run ./cmd/server
+==============================================================================================================================================================================
+2- Abrir o endereço local e conferir se a API está ativa (na segunda janela do PowerShell):
+Pelo navegador:
+Start-Process http://localhost:8080/health/live
+Pelo PowerShell:
+Invoke-RestMethod http://localhost:8080/health/live
+==============================================================================================================================================================================
+3- Criar uma carteira:
+$wallet1 = Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8080/wallets `
+  -ContentType "application/json" `
+  -Body '{"playerId":"jogador-teste-01","initialBalance":{"amount":"100.00","currency":"BRL"}}'
+$wallet1
+==============================================================================================================================================================================
+4- Fazer uma aposta:
+$betBody = @{
+  providerId = "provider-a"
+  externalTransactionId = "transacao-aposta-01"
+  playerId = "jogador-teste-01"
+  walletId = $wallet1.id
+  roundId = "rodada-01"
+  gameId = "jogo-teste"
+  kind = "BET"
+  money = @{ amount = "20.00"; currency = "BRL" }
+} | ConvertTo-Json -Depth 3
+
+Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8080/wagering/transactions `
+  -ContentType "application/json" `
+  -Headers @{"Idempotency-Key"="chave-aposta-01"} `
+  -Body $betBody
+==============================================================================================================================================================================
+5- Simular uma vitória:
+$winBody = @{
+  providerId = "provider-a"
+  externalTransactionId = "transacao-vitoria-01"
+  playerId = "jogador-teste-01"
+  walletId = $wallet1.id
+  roundId = "rodada-01"
+  gameId = "jogo-teste"
+  kind = "WIN"
+  money = @{ amount = "100.00"; currency = "BRL" }
+} | ConvertTo-Json -Depth 3
+
+Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8080/wagering/transactions `
+  -ContentType "application/json" `
+  -Headers @{"Idempotency-Key"="chave-vitoria-01"} `
+  -Body $winBody
+==============================================================================================================================================================================
+6- Simular uma perda:
+$lossBody = @{
+  providerId = "provider-a"
+  externalTransactionId = "transacao-derrota-01"
+  playerId = "jogador-teste-01"
+  walletId = $wallet1.id
+  roundId = "rodada-01"
+  gameId = "jogo-teste"
+  kind = "LOSS"
+  money = @{ amount = "10.00"; currency = "BRL" }
+} | ConvertTo-Json -Depth 3
+
+Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8080/wagering/transactions `
+  -ContentType "application/json" `
+  -Headers @{"Idempotency-Key"="chave-derrota-01"} `
+  -Body $lossBody
+==============================================================================================================================================================================
+7- Conferir o saldo atual de uma carteira:
+Invoke-RestMethod "http://localhost:8080/wallets/$($wallet1.id)"
+==============================================================================================================================================================================
+8- Encerrar API:
+CTRL+C
+==============================================================================================================================================================================
