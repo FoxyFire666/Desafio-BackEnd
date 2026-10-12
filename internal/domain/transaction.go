@@ -19,32 +19,32 @@ const (
 type TransactionStatus string
 
 const (
-	TransactionStatusPending             TransactionStatus = "PENDING"
-	TransactionStatusProcessed           TransactionStatus = "PROCESSED"
-	TransactionStatusRejected            TransactionStatus = "REJECTED"
-	TransactionStatusFailed              TransactionStatus = "FAILED"
-	TransactionStatusPendingReference    TransactionStatus = "PENDING_REFERENCE"
+	TransactionStatusPending          TransactionStatus = "PENDING"
+	TransactionStatusProcessed        TransactionStatus = "PROCESSED"
+	TransactionStatusRejected         TransactionStatus = "REJECTED"
+	TransactionStatusFailed           TransactionStatus = "FAILED"
+	TransactionStatusPendingReference TransactionStatus = "PENDING_REFERENCE"
 )
 
 type WagerTransaction struct {
-	ID                     string            `json:"id"`
-	ProviderID             string            `json:"providerId"`
-	ExternalTransactionID  string            `json:"externalTransactionId"`
-	IdempotencyKey         string            `json:"idempotencyKey"`
-	PlayerID               string            `json:"playerId"`
-	WalletID               string            `json:"walletId"`
-	RoundID                string            `json:"roundId"`
-	GameID                 string            `json:"gameId"`
-	Kind                   TransactionKind   `json:"kind"`
+	ID                    string            `json:"id"`
+	ProviderID            string            `json:"providerId"`
+	ExternalTransactionID string            `json:"externalTransactionId"`
+	IdempotencyKey        string            `json:"idempotencyKey"`
+	PlayerID              string            `json:"playerId"`
+	WalletID              string            `json:"walletId"`
+	RoundID               string            `json:"roundId"`
+	GameID                string            `json:"gameId"`
+	Kind                  TransactionKind   `json:"kind"`
 	Money                 Money             `json:"money"`
-	ReferenceExternalTxID  string            `json:"referenceExternalTransactionId,omitempty"`
-	Status                 TransactionStatus `json:"status"`
-	FailureCode            string            `json:"failureCode,omitempty"`
-	ResultMoney            Money             `json:"resultMoney,omitempty"`
-	CreatedAt              time.Time         `json:"createdAt"`
-	UpdatedAt              time.Time         `json:"updatedAt"`
-	ResolvedInternalTxID   string            `json:"resolvedInternalTransactionId,omitempty"`
-	BusinessHash           string            `json:"businessHash,omitempty"`
+	ReferenceExternalTxID string            `json:"referenceExternalTransactionId,omitempty"`
+	Status                TransactionStatus `json:"status"`
+	FailureCode           string            `json:"failureCode,omitempty"`
+	ResultMoney           Money             `json:"resultMoney,omitempty"`
+	CreatedAt             time.Time         `json:"createdAt"`
+	UpdatedAt             time.Time         `json:"updatedAt"`
+	ResolvedInternalTxID  string            `json:"resolvedInternalTransactionId,omitempty"`
+	BusinessHash          string            `json:"businessHash,omitempty"`
 }
 
 func NewWagerTransaction(id, providerID, externalTransactionID, idempotencyKey, playerID, walletID, roundID, gameID string, kind TransactionKind, money Money) WagerTransaction {

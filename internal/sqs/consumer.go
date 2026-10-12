@@ -7,9 +7,9 @@ import (
 )
 
 type MessageEnvelope struct {
-	MessageID  string    `json:"messageId"`
-	Type       string    `json:"type"`
-	OccurredAt time.Time `json:"occurredAt"`
+	MessageID  string         `json:"messageId"`
+	Type       string         `json:"type"`
+	OccurredAt time.Time      `json:"occurredAt"`
 	Data       map[string]any `json:"data"`
 }
 

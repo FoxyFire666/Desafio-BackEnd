@@ -72,17 +72,17 @@ func (s *Service) OpenWallet(ctx context.Context, req OpenWalletRequest) (domain
 	}
 	if req.Balance.Amount > 0 {
 		ledgerEntry := repository.LedgerEntry{
-			ID:       newID("ledger"),
-			WalletID: wallet.ID,
-			Type:     "OPENING",
-			Amount:   req.Balance,
-			Balance:  wallet.Balance,
+			ID:        newID("ledger"),
+			WalletID:  wallet.ID,
+			Type:      "OPENING",
+			Amount:    req.Balance,
+			Balance:   wallet.Balance,
 			CreatedAt: time.Now().UTC(),
 		}
 		if err := s.Store.AppendLedgerEntry(ctx, ledgerEntry); err != nil {
 			return domain.Wallet{}, err
 		}
-		event := repository.OutboxEvent{ID: newID("outbox"), Type: "WalletBalanceChanged", Aggregate: wallet.ID, Payload: fmt.Sprintf(`{"walletId":"%s","transactionId":"%s","direction":"credit","money":"%s","balanceBefore":"0.00","balanceAfter":"%s","walletVersion":1}` , wallet.ID, "OPENING", req.Balance.String(), wallet.Balance.String()), CreatedAt: time.Now().UTC()};
+		event := repository.OutboxEvent{ID: newID("outbox"), Type: "WalletBalanceChanged", Aggregate: wallet.ID, Payload: fmt.Sprintf(`{"walletId":"%s","transactionId":"%s","direction":"credit","money":"%s","balanceBefore":"0.00","balanceAfter":"%s","walletVersion":1}`, wallet.ID, "OPENING", req.Balance.String(), wallet.Balance.String()), CreatedAt: time.Now().UTC()}
 		if err := s.Store.AppendOutbox(ctx, event); err != nil {
 			return domain.Wallet{}, err
 		}
@@ -187,21 +187,21 @@ func (s *Service) CreateWagerTransaction(ctx context.Context, req WagerRequest) 
 		return WagerResult{}, err
 	}
 	ledgerEntry := repository.LedgerEntry{
-		ID:       newID("ledger"),
-		WalletID: wallet.ID,
-		Type:     string(req.Kind),
-		Amount:   req.Money,
-		Balance:  wallet.Balance,
+		ID:        newID("ledger"),
+		WalletID:  wallet.ID,
+		Type:      string(req.Kind),
+		Amount:    req.Money,
+		Balance:   wallet.Balance,
 		CreatedAt: time.Now().UTC(),
 	}
 	if err := s.Store.AppendLedgerEntry(ctx, ledgerEntry); err != nil {
 		return WagerResult{}, err
 	}
-	event := repository.OutboxEvent{ID: newID("outbox"), Type: "WagerTransactionProcessed", Aggregate: tx.ID, Payload: fmt.Sprintf(`{"transactionId":"%s","walletId":"%s","status":"PROCESSED","amount":"%s"}` , tx.ID, wallet.ID, req.Money.String()), CreatedAt: time.Now().UTC()}
+	event := repository.OutboxEvent{ID: newID("outbox"), Type: "WagerTransactionProcessed", Aggregate: tx.ID, Payload: fmt.Sprintf(`{"transactionId":"%s","walletId":"%s","status":"PROCESSED","amount":"%s"}`, tx.ID, wallet.ID, req.Money.String()), CreatedAt: time.Now().UTC()}
 	if err := s.Store.AppendOutbox(ctx, event); err != nil {
 		return WagerResult{}, err
 	}
-	balanceEvent := repository.OutboxEvent{ID: newID("outbox"), Type: "WalletBalanceChanged", Aggregate: wallet.ID, Payload: fmt.Sprintf(`{"walletId":"%s","transactionId":"%s","direction":"%s","money":"%s","balanceBefore":"0.00","balanceAfter":"%s","walletVersion":%d}` , wallet.ID, tx.ID, "debit", req.Money.String(), wallet.Balance.String(), wallet.Version), CreatedAt: time.Now().UTC()}
+	balanceEvent := repository.OutboxEvent{ID: newID("outbox"), Type: "WalletBalanceChanged", Aggregate: wallet.ID, Payload: fmt.Sprintf(`{"walletId":"%s","transactionId":"%s","direction":"%s","money":"%s","balanceBefore":"0.00","balanceAfter":"%s","walletVersion":%d}`, wallet.ID, tx.ID, "debit", req.Money.String(), wallet.Balance.String(), wallet.Version), CreatedAt: time.Now().UTC()}
 	if err := s.Store.AppendOutbox(ctx, balanceEvent); err != nil {
 		return WagerResult{}, err
 	}

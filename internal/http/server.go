@@ -64,7 +64,7 @@ func (s *Server) handleReadiness(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleWallets(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		var in struct {
-			PlayerID       string        `json:"playerId"`
+			PlayerID       string       `json:"playerId"`
 			InitialBalance domain.Money `json:"initialBalance"`
 		}
 		if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
@@ -102,15 +102,15 @@ func (s *Server) handleWalletDetails(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleWagerTransactions(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		var in struct {
-			ProviderID             string                `json:"providerId"`
-			ExternalTransactionID  string                `json:"externalTransactionId"`
-			PlayerID               string                `json:"playerId"`
-			WalletID               string                `json:"walletId"`
-			RoundID                string                `json:"roundId"`
-			GameID                 string                `json:"gameId"`
-			Kind                   domain.TransactionKind `json:"kind"`
-			Money                  domain.Money          `json:"money"`
-			ReferenceExternalTxID  string                `json:"referenceExternalTransactionId,omitempty"`
+			ProviderID            string                 `json:"providerId"`
+			ExternalTransactionID string                 `json:"externalTransactionId"`
+			PlayerID              string                 `json:"playerId"`
+			WalletID              string                 `json:"walletId"`
+			RoundID               string                 `json:"roundId"`
+			GameID                string                 `json:"gameId"`
+			Kind                  domain.TransactionKind `json:"kind"`
+			Money                 domain.Money           `json:"money"`
+			ReferenceExternalTxID string                 `json:"referenceExternalTransactionId,omitempty"`
 		}
 		if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 			http.Error(w, `{"error":"invalid request"}`, http.StatusBadRequest)
@@ -122,7 +122,7 @@ func (s *Server) handleWagerTransactions(w http.ResponseWriter, r *http.Request)
 			return
 		}
 		result, err := s.Service.CreateWagerTransaction(r.Context(), service.WagerRequest{
-			ProviderID:             in.ProviderID,
+			ProviderID:            in.ProviderID,
 			ExternalTransactionID: in.ExternalTransactionID,
 			IdempotencyKey:        key,
 			PlayerID:              in.PlayerID,

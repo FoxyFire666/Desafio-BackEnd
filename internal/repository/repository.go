@@ -32,12 +32,12 @@ type WalletStore interface {
 }
 
 type LedgerEntry struct {
-	ID        string    `json:"id"`
-	WalletID  string    `json:"walletId"`
-	Type      string    `json:"type"`
+	ID        string       `json:"id"`
+	WalletID  string       `json:"walletId"`
+	Type      string       `json:"type"`
 	Amount    domain.Money `json:"amount"`
 	Balance   domain.Money `json:"balance"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt time.Time    `json:"createdAt"`
 }
 
 type OutboxEvent struct {
